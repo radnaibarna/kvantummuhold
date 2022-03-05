@@ -5,7 +5,7 @@ import atmosModell as atm
 
 class Communicator(ABC): # a kommunikáló feleket modellező absztakt osztály
     def __init__(self, lat, lon):
-        self.lon=lon 
+        self. lon=lon 
         self.lat=lat
         self.athmoshpere=""
         self.name=""
@@ -13,6 +13,7 @@ class Communicator(ABC): # a kommunikáló feleket modellező absztakt osztály
         self.sentmessages=[]
         self.recievedmessages=[]
         self.Qber=0
+        self.timespent = 0
     def AddAir(self, athmosphere):
         self.athmosphere=athmosphere
 
@@ -45,14 +46,17 @@ class GroundStation(Communicator):
         self.usedbases=[]
         self.correctbits=[]
         self.keybits=[]
+        
     
     def AddAir(self, athmoshpere):
         self.athmoshpere=athmoshpere
         
 
     def sendRadioBroadcast(self, message):
+        self.timespent+=0.1
         self.athmoshpere.BroadcastGroundToSatellite(message)
         self.sentmessages.append(message)
+        return 0.1
 
     def recieveRadioBroadcast(self, message):
         self.recievedmessages.append(message)
@@ -160,7 +164,10 @@ class GroundStation(Communicator):
         print("kulcs mérete: ", len(self.correctbits))
         print("végleges kulcs: ", self.keybits)
 
-    
+class Satellite_2_0(Communicator):
+    def __init__(self, lat, lon):
+        super().__init__(lat, lon)
+          
 
 class Satellite(Communicator):
     def __init__(self, lat, lon, height, speed):
@@ -176,14 +183,38 @@ class Satellite(Communicator):
         self.SecondCorrectBits=[]
         self.SecondBaseBases=[]
         self.GroundMeasurebases=[]
+
+
+        self.schedule = {}
         self.FirstAllSentQubits=0
         self.SecondAllSentQubits=0
+        self.typeofstations = {
+
+        }
+        self.stations = {
+
+        }
+        self.station_athmospheres = {}
+
+    def AddToSchedule(self, groundstationname, amount, start_time):
+        self.schedule[start_time] = {
+                "groundstationname" : groundstationname,
+                "amount" : amount
+        }
+    
+    def addGroundStation(self, station_name, station_obj, type_of_groundstation, athmosphere_of_station):
+        self.typeofstations[station_name] = type_of_groundstation
+        self.stations[station_name] = station_obj
+        self.station_athmospheres[station_name] = athmosphere_of_station
+    
 
     def getHeight(self):
         return self.height
     
     def AddAir(self, athmoshpere):
-        self.athmoshpere=athmoshpere
+        self.athmoshpere=athmoshpere 
+
+    
 
     def sendRadioBroadcast(self, message):
         self.athmoshpere.BroadcastSatelliteToGround(message)
@@ -430,5 +461,3 @@ satellite.SendMatchingBases()
 groundstation.PrintInfo()
 satellite.printInfo()"""
 
-
-false 

@@ -77,6 +77,7 @@ class Route:
         air_2.SetTransmittancy()
         satellite.AddSector(self.sector4)
         ground_2.AddSector(self.sector4)
+
         self.BB84(satellite, ground_2)
         satellite.SendXORedKey()
         
@@ -91,9 +92,16 @@ class Route:
         self.sector4.PrintInfo()
 
 
+    def Simulate_With_Fixed_Time(self, satellite, ground_1, ground_2, air_1, air_2):
+        
+        pass
+
+        #új verzió, fix idővel, nem fix qubittel
+
+
 
     def BB84(self, satellite, groundstation):
-        satellite.SendQubit(700)
+        satellite.SendQubit(1)
         groundstation.SendMeasuredBases()
         satellite.SendMatchingBases()
         groundstation.PrintInfo()
@@ -188,6 +196,7 @@ lon1=19.040236
 lat2=40.712345
 lon2=-74.005531
 sh=500
+
 
 
 
